@@ -13,8 +13,8 @@ const TextButton = ({
 	style?: object
 }) => {
 	return (
-		<TouchableOpacity onPress={onPress} style={style}>
-			<StyledText variant='actionM' style={styles.title}>
+		<TouchableOpacity onPress={onPress}>
+			<StyledText variant='actionM' style={[styles.title, style]}>
 				{title}
 			</StyledText>
 		</TouchableOpacity>
