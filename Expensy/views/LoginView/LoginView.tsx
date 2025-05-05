@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import StyledText from '@/components/StyledText/StyledText'
 import TextField from '@/components/TextField/TextField'
 import {
+	Button,
 	Keyboard,
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
@@ -46,6 +47,10 @@ export default function LoginView() {
 					behavior='padding'
 					keyboardVerticalOffset={100}
 				>
+					<Button
+						title='Dev login'
+						onPress={() => router.replace('/(tabs)/home')}
+					/>
 					<View style={styles.content}>
 						<View>
 							<StyledText variant='h1' style={styles.title}>

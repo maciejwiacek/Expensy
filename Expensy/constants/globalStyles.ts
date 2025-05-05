@@ -3,7 +3,7 @@ import { colors } from './colors'
 
 const globalStyles = StyleSheet.create({
 	h1: {
-		fontSize: 32,
+		fontSize: 26,
 		fontFamily: 'InterExtraBold',
 		color: colors.dark500,
 	},
