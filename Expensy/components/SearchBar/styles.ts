@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
 	},
 	iconContainer: {
 		marginRight: 10,
+		marginTop: 2,
 	},
 	filterButton: {
 		aspectRatio: 1,
