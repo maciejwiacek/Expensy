@@ -1,11 +1,22 @@
+import { useAuth } from '@clerk/clerk-expo'
+import { useRouter } from 'expo-router'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Button, SafeAreaView, Text } from 'react-native'
 
 const Home = () => {
+	const { signOut } = useAuth()
+	const router = useRouter()
 	return (
-		<View>
+		<SafeAreaView>
 			<Text>Home</Text>
-		</View>
+			<Button
+				title='Log out'
+				onPress={() => {
+					signOut()
+					router.replace('/(authentication)/login')
+				}}
+			/>
+		</SafeAreaView>
 	)
 }
 

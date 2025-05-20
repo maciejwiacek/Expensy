@@ -3,6 +3,7 @@ import PrimaryButton from '@/components/PrimaryButton'
 import TextButton from '@/components/TextButton'
 import TextInput from '@/components/TextInput'
 import { Colors } from '@/constants/Colors'
+import { useSignIn } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import {
@@ -18,8 +19,29 @@ import {
 
 const login = () => {
 	const router = useRouter()
+	const { signIn, setActive, isLoaded } = useSignIn()
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
+
+	const onLoginPress = async () => {
+		if (!isLoaded) return
+
+		try {
+			const signInAttempt = await signIn.create({
+				identifier: email,
+				password,
+			})
+
+			if (signInAttempt.status === 'complete') {
+				await setActive({ session: signInAttempt.createdSessionId })
+				router.replace('/(authenticated)/(tabs)/home')
+			} else {
+				console.error(JSON.stringify(signInAttempt, null, 2))
+			}
+		} catch (err) {
+			console.error(JSON.stringify(err, null, 2))
+		}
+	}
 
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -62,7 +84,10 @@ const login = () => {
 						}}
 					/>
 					<View style={styles.loginButton}>
-						<PrimaryButton title='Zaloguj się' onPress={() => {}} />
+						<PrimaryButton
+							title='Zaloguj się'
+							onPress={onLoginPress}
+						/>
 					</View>
 					<View style={styles.registerButton}>
 						<Text style={styles.secondaryText}>
