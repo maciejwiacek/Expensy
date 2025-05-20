@@ -9,7 +9,7 @@ export default function Index() {
 
 	const [hasMounted, setHasMounted] = useState(false)
 
-	// Wait for initial render to complete
+	// Wait for initial render to complete, test before deployment if needed
 	useEffect(() => {
 		setHasMounted(true)
 	}, [])

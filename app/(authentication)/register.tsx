@@ -4,6 +4,7 @@ import TextButton from '@/components/TextButton'
 import TextInput from '@/components/TextInput'
 import VerificationCodePrompt from '@/components/VerificationCodePrompt'
 import { Colors } from '@/constants/Colors'
+import { useSignUp } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import {
@@ -26,6 +27,46 @@ const Register = () => {
 
 	const router = useRouter()
 
+	const { isLoaded, signUp, setActive } = useSignUp()
+
+	const onSignUpPress = async () => {
+		if (!isLoaded) return
+
+		try {
+			await signUp.create({
+				emailAddress: email,
+				password: password,
+				username: name,
+			})
+
+			await signUp.prepareEmailAddressVerification({
+				strategy: 'email_code',
+			})
+			setShowCodePrompt(true)
+		} catch (err) {
+			console.error(JSON.stringify(err, null, 2))
+		}
+	}
+
+	const onVerifyPress = async () => {
+		if (!isLoaded) return
+
+		try {
+			const signUpAttempt = await signUp.attemptEmailAddressVerification({
+				code: verificationCode,
+			})
+
+			if (signUpAttempt.status === 'complete') {
+				await setActive({ session: signUpAttempt.createdSessionId })
+				router.replace('/(authenticated)/(tabs)/home')
+			} else {
+				console.log('Verification failed')
+			}
+		} catch (err) {
+			console.error(JSON.stringify(err, null, 2))
+		}
+	}
+
 	return (
 		<>
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -38,8 +79,8 @@ const Register = () => {
 							</Text>
 							<View style={styles.textInputsContainer}>
 								<TextInput
-									placeholder='Podaj imię i nazwisko'
-									label='Imię i nazwisko'
+									placeholder='Podaj nazwę użytkownika'
+									label='Nazwa użytkownika'
 									value={name}
 									onChangeText={setName}
 								/>
@@ -85,9 +126,7 @@ const Register = () => {
 						<View>
 							<PrimaryButton
 								title='Zarejestruj się'
-								onPress={() => {
-									setShowCodePrompt(true)
-								}}
+								onPress={onSignUpPress}
 							/>
 							<Text
 								style={{
@@ -118,7 +157,7 @@ const Register = () => {
 					setVerificationCode('')
 					setShowCodePrompt(false)
 				}}
-				onConfirm={() => {}}
+				onConfirm={onVerifyPress}
 				code={verificationCode}
 				setCode={setVerificationCode}
 				isError={false}
