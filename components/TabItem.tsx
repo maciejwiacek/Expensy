@@ -1,6 +1,7 @@
 import { Colors } from '@/constants/Colors'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { ChartBar, House, User, Wallet } from 'phosphor-react-native'
+import { JSX } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 const TabItem = ({ state, navigation }: BottomTabBarProps) => {
@@ -13,8 +14,7 @@ const TabItem = ({ state, navigation }: BottomTabBarProps) => {
 
 				const generateIcon = (
 					IconComponent: React.ComponentType<any>,
-					isFocused: boolean,
-					colors: { highlight500: string; light500: string }
+					isFocused: boolean
 				) => {
 					return (
 						<IconComponent
@@ -30,10 +30,10 @@ const TabItem = ({ state, navigation }: BottomTabBarProps) => {
 				}
 
 				const tabIcon: Record<string, JSX.Element> = {
-					home: generateIcon(House, isFocused, Colors),
-					transactions: generateIcon(Wallet, isFocused, Colors),
-					report: generateIcon(ChartBar, isFocused, Colors),
-					profile: generateIcon(User, isFocused, Colors),
+					home: generateIcon(House, isFocused),
+					transactions: generateIcon(Wallet, isFocused),
+					report: generateIcon(ChartBar, isFocused),
+					profile: generateIcon(User, isFocused),
 				}
 
 				const onPress = () => {
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
 		height: 80,
 		borderTopWidth: 1,
 		borderTopColor: Colors.light300,
+		backgroundColor: 'white',
 	},
 	tabButton: {
 		flex: 1,
