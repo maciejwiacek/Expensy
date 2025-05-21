@@ -9,17 +9,14 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 const Home = () => {
 	const { user } = useUser()
 	const router = useRouter()
+	const userName = user?.username
+		? user.username.charAt(0).toUpperCase() + user.username.slice(1)
+		: 'Błąd użytkownika!'
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
 				<Text style={styles.titleText}>Witaj ponownie,</Text>
-				<Text style={styles.usernameText}>
-					{user?.username
-						? user.username.charAt(0).toUpperCase() +
-						  user.username.slice(1)
-						: ''}
-					!
-				</Text>
+				<Text style={styles.usernameText}>{userName}!</Text>
 				<Card />
 				<View style={styles.transactionsHeaderContainer}>
 					<Text style={styles.titleText}>Transakcje</Text>
