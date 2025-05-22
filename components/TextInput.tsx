@@ -15,12 +15,14 @@ const TextInput = ({
 	value,
 	onChangeText,
 	secureTextEntry = false,
+	keyboardType = 'default',
 }: {
 	placeholder: string
 	label: string
 	value: string
 	onChangeText: React.Dispatch<React.SetStateAction<string>>
 	secureTextEntry?: boolean
+	keyboardType?: 'default' | 'numeric' | 'email-address' | 'phone-pad'
 }) => {
 	const [isFocused, setIsFocused] = useState(false)
 	const [isSecureTextEntry, setIsSecureTextEntry] = useState(secureTextEntry)
@@ -47,7 +49,7 @@ const TextInput = ({
 					placeholderTextColor={Colors.dark100}
 					onFocus={() => setIsFocused(true)}
 					onBlur={() => setIsFocused(false)}
-					keyboardType='default'
+					keyboardType={keyboardType}
 				/>
 				{secureTextEntry && (
 					<TouchableOpacity
