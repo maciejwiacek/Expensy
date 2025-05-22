@@ -5,7 +5,7 @@ const Layout = () => {
 		<Stack>
 			<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
 			<Stack.Screen
-				name='add-transaction/test'
+				name='add-transaction/add-manually'
 				options={{ headerShown: false }}
 			/>
 		</Stack>

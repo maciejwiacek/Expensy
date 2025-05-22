@@ -1,4 +1,5 @@
 import Card from '@/components/Card'
+import IconButton from '@/components/IconButton'
 import TextButton from '@/components/TextButton'
 import TransactionItem from '@/components/TransactionItem'
 import { Colors } from '@/constants/Colors'
@@ -40,6 +41,15 @@ const Home = () => {
 					/>
 				</View>
 			</View>
+			<View style={styles.fabContainer}>
+				<IconButton
+					icon={'plus'}
+					size={50}
+					onPress={() => {
+						router.push('/add-transaction/add-manually')
+					}}
+				/>
+			</View>
 		</SafeAreaView>
 	)
 }
@@ -74,5 +84,10 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		marginBottom: 25,
 		marginTop: 30,
+	},
+	fabContainer: {
+		position: 'absolute',
+		bottom: 24,
+		right: 24,
 	},
 })
