@@ -1,8 +1,8 @@
 import { Colors } from '@/constants/Colors'
 import { DotsThreeOutline } from 'phosphor-react-native'
 import React from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import BrandIcon from './BrandIcon'
 const Card = () => {
 	return (
 		<View style={styles.container}>
@@ -16,14 +16,9 @@ const Card = () => {
 				<TouchableOpacity hitSlop={10}>
 					<DotsThreeOutline weight='fill' size={18} color='white' />
 				</TouchableOpacity>
-				<Image
-					source={{
-						uri: 'https://i0.wp.com/americassbdc.org/wp-content/uploads/2021/05/Visa-logo-white.png?fit=900%2C291&ssl=1',
-					}}
-					width={64}
-					height={18}
-					resizeMode='contain'
-				/>
+				<View style={styles.iconContainer}>
+					<BrandIcon name='Visa' color='white' size={60} />
+				</View>
 			</View>
 		</View>
 	)
@@ -61,5 +56,9 @@ const styles = StyleSheet.create({
 		fontWeight: '700',
 		fontSize: 16,
 		color: 'white',
+	},
+	iconContainer: {
+		position: 'absolute',
+		bottom: -15,
 	},
 })

@@ -25,6 +25,7 @@ const DropdownPicker = ({
 		<View>
 			<Text style={styles.label}>Typ Transakcji</Text>
 			<DropDownPicker
+				listMode='FLATLIST'
 				open={open}
 				items={items}
 				value={value}

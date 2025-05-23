@@ -1,8 +1,9 @@
 import { Colors } from '@/constants/Colors'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { ShoppingCart } from 'phosphor-react-native'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Float } from 'react-native/Libraries/Types/CodegenTypes'
+import BrandIcon from './BrandIcon'
 
 const TransactionItem = ({
 	shopName,
@@ -18,11 +19,18 @@ const TransactionItem = ({
 	return (
 		<TouchableOpacity style={styles.container} onPress={onPress}>
 			<View style={styles.iconContainer}>
-				<FontAwesome name='apple' size={33} color={'white'} />
+				<BrandIcon
+					name={shopName}
+					color='white'
+					size={40}
+					fallback={<ShoppingCart color='white' size={32} />}
+				/>
 			</View>
 			<View style={styles.content}>
 				<View style={styles.contentLeft}>
-					<Text style={styles.titleText}>{shopName}</Text>
+					<Text style={styles.titleText} numberOfLines={1}>
+						{shopName}
+					</Text>
 					<Text style={styles.dateText}>{date}</Text>
 				</View>
 				<Text
@@ -74,6 +82,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: '700',
 		color: Colors.dark500,
+		maxWidth: '80%',
 	},
 	dateText: {
 		fontFamily: 'Inter',

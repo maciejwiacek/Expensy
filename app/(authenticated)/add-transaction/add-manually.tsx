@@ -52,7 +52,6 @@ const AddManually = () => {
 						/>
 					),
 					onPress: () => {
-						console.log('back')
 						router.back()
 					},
 				}}
@@ -73,8 +72,7 @@ const AddManually = () => {
 			/>
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}
-				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-				keyboardVerticalOffset={20}
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 			>
 				<TouchableWithoutFeedback
 					onPress={() => {

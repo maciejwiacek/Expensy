@@ -28,13 +28,25 @@ const Home = () => {
 				</View>
 				<View style={{ gap: 15 }}>
 					<TransactionItem
-						shopName={'Carrefour'}
+						shopName={'Monopolowy u Stasia'}
 						date={'24.02.2025'}
 						amount={-304.98}
 						onPress={() => {}}
 					/>
 					<TransactionItem
-						shopName={'Carrefour'}
+						shopName={'Lidl'}
+						date={'24.02.2025'}
+						amount={304.98}
+						onPress={() => {}}
+					/>
+					<TransactionItem
+						shopName={'Zara'}
+						date={'24.02.2025'}
+						amount={304.98}
+						onPress={() => {}}
+					/>
+					<TransactionItem
+						shopName={'Uber'}
 						date={'24.02.2025'}
 						amount={304.98}
 						onPress={() => {}}
