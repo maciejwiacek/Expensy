@@ -2,6 +2,7 @@ import DropdownPicker from '@/components/DropdownPicker'
 import NavBar from '@/components/NavBar'
 import TextInput from '@/components/TextInput'
 import { Colors } from '@/constants/Colors'
+import { useAuth } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
 import { CaretLeft } from 'phosphor-react-native'
 import React, { useState } from 'react'
@@ -16,6 +17,7 @@ import {
 } from 'react-native'
 const AddManually = () => {
 	const router = useRouter()
+	const { getToken } = useAuth()
 	const [showTypePicker, setShowTypePicker] = useState(false)
 	const [showCategoryPicker, setShowCategoryPicker] = useState(false)
 
@@ -39,6 +41,33 @@ const AddManually = () => {
 		{ label: 'Transport', value: 'transport' },
 		{ label: 'Inne', value: 'other' },
 	]
+
+	const addTestTransaction = async () => {
+		const token = await getToken()
+		console.log('Token:', token)
+		if (!token) {
+			console.log('No token found')
+			return
+		}
+		await fetch(
+			'https://us-central1-expensy-eaaf0.cloudfunctions.net/addTransaction/addTransaction',
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					type,
+					title,
+					price,
+					date,
+					category,
+					description,
+				}),
+			}
+		)
+	}
 	return (
 		<SafeAreaView style={styles.container}>
 			<NavBar
@@ -58,14 +87,7 @@ const AddManually = () => {
 				rightButton={{
 					label: 'Zapisz',
 					onPress: () => {
-						console.log('Your data:', {
-							type,
-							title,
-							price,
-							date,
-							category,
-							description,
-						})
+						addTestTransaction()
 						router.back()
 					},
 				}}
