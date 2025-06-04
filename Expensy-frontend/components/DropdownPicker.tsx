@@ -10,6 +10,7 @@ const DropdownPicker = ({
 	open,
 	setOpen,
 	placeholder,
+	title,
 }: {
 	items: {
 		label: string
@@ -20,10 +21,11 @@ const DropdownPicker = ({
 	open: boolean
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 	placeholder?: string
+	title: string
 }) => {
 	return (
 		<View>
-			<Text style={styles.label}>Typ Transakcji</Text>
+			<Text style={styles.label}>{title}</Text>
 			<DropDownPicker
 				listMode='FLATLIST'
 				open={open}

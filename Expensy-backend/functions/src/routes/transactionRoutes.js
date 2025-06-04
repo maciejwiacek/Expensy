@@ -5,12 +5,13 @@ import {
   getTransactions,
   updateTransaction,
 } from "../controllers/transactionController.js";
+import { requireAuth } from "@clerk/express";
 
 const router = express.Router();
 
-router.post("/create", createTransaction);
-router.get("/", getTransactions);
-router.put("/:id", updateTransaction);
-router.delete("/:id", deleteTransaction);
+router.post("/", requireAuth(), createTransaction);
+router.get("/", requireAuth(), getTransactions);
+router.put("/:id", requireAuth(), updateTransaction);
+router.delete("/:id", requireAuth(), deleteTransaction);
 
 export default router;

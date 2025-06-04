@@ -3,6 +3,7 @@ import IconButton from '@/components/IconButton'
 import TextButton from '@/components/TextButton'
 import TransactionItem from '@/components/TransactionItem'
 import { Colors } from '@/constants/Colors'
+import { useTransactions } from '@/hooks/useTransactions'
 import { useUser } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
@@ -13,6 +14,8 @@ const Home = () => {
 	const userName = user?.username
 		? user.username.charAt(0).toUpperCase() + user.username.slice(1)
 		: 'Błąd użytkownika!'
+	const { data: transactions, isLoading, isError, error } = useTransactions()
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
@@ -27,30 +30,22 @@ const Home = () => {
 					/>
 				</View>
 				<View style={{ gap: 15 }}>
-					<TransactionItem
-						shopName={'Monopolowy u Stasia'}
-						date={'24.02.2025'}
-						amount={-304.98}
-						onPress={() => {}}
-					/>
-					<TransactionItem
-						shopName={'Lidl'}
-						date={'24.02.2025'}
-						amount={304.98}
-						onPress={() => {}}
-					/>
-					<TransactionItem
-						shopName={'Zara'}
-						date={'24.02.2025'}
-						amount={304.98}
-						onPress={() => {}}
-					/>
-					<TransactionItem
-						shopName={'Uber'}
-						date={'24.02.2025'}
-						amount={304.98}
-						onPress={() => {}}
-					/>
+					{isLoading && <Text>Ładowanie...</Text>}
+					{isError && <Text>Błąd: {error?.message}</Text>}
+					{transactions?.map((tx) => (
+						<TransactionItem
+							key={tx.id}
+							shopName={tx.title}
+							date={new Date(tx.date).toLocaleDateString('pl-PL')}
+							amount={
+								tx.type === 'expense'
+									? tx.amount * -1
+									: tx.amount
+							}
+							onPress={() => {}}
+						/>
+					))}
+					{transactions?.length === 0 && <Text>Brak transakcji</Text>}
 				</View>
 			</View>
 			<View style={styles.fabContainer}>

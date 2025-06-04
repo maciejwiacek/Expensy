@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: Colors.highlight500,
 		width: '100%',
-		aspectRatio: 1.66,
+		aspectRatio: 1.55,
 		borderRadius: 35,
 		paddingHorizontal: 30,
 		paddingVertical: 35,

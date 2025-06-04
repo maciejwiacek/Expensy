@@ -2,12 +2,23 @@ import admin from "../config/firebase.js";
 
 const db = admin.firestore();
 
-export const addTransactionToDB = async ({ userId, amount, type }) => {
+export const addTransactionToDB = async ({
+  userId,
+  type,
+  title,
+  amount,
+  date,
+  category,
+  description,
+}) => {
   const docRef = await db.collection("transactions").add({
     userId,
-    amount,
     type,
-    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    title,
+    amount,
+    date,
+    category,
+    description,
   });
 
   return docRef.id;

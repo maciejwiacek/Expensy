@@ -7,6 +7,7 @@ import {
 	Inter_800ExtraBold,
 	useFonts,
 } from '@expo-google-fonts/inter'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Slot } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
 import { ActivityIndicator } from 'react-native'
@@ -37,6 +38,8 @@ const tokenCache = {
 	},
 }
 
+const queryClient = new QueryClient()
+
 const RootLayout = () => {
 	const [fontsLoaded] = useFonts({
 		Inter400: Inter_400Regular,
@@ -54,7 +57,9 @@ const RootLayout = () => {
 			publishableKey={CLERK_PUBLISHABLE_KEY}
 			tokenCache={tokenCache}
 		>
-			<Slot />
+			<QueryClientProvider client={queryClient}>
+				<Slot />
+			</QueryClientProvider>
 		</ClerkProvider>
 	)
 }

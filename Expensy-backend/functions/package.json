@@ -12,9 +12,10 @@
   "engines": {
     "node": "22"
   },
+  "type": "module",
   "main": "index.js",
   "dependencies": {
-    "@clerk/backend": "^1.33.0",
+    "@clerk/express": "^1.5.2",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "firebase-admin": "^12.7.0",
