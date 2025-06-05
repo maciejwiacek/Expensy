@@ -2,6 +2,7 @@ import IconButton from '@/components/IconButton'
 import SearchBar from '@/components/SearchBar'
 import TransactionItem from '@/components/TransactionItem'
 import { Colors } from '@/constants/Colors'
+import { useTransactions } from '@/hooks/useTransactions'
 import React, { useState } from 'react'
 import {
 	Keyboard,
@@ -14,6 +15,8 @@ import {
 
 const Transactions = () => {
 	const [searchValue, setSearchValue] = useState('')
+	const { transactionsQuery } = useTransactions()
+
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<SafeAreaView style={styles.container}>
@@ -33,18 +36,32 @@ const Transactions = () => {
 						/>
 					</View>
 					<View style={{ gap: 15 }}>
-						<TransactionItem
-							shopName={'Carrefour'}
-							date={'24.02.2025'}
-							amount={-304.98}
-							onPress={() => {}}
-						/>
-						<TransactionItem
-							shopName={'Carrefour'}
-							date={'24.02.2025'}
-							amount={304.98}
-							onPress={() => {}}
-						/>
+						{transactionsQuery.isLoading && (
+							<Text>Ładowanie...</Text>
+						)}
+						{transactionsQuery.isError && (
+							<Text>
+								Błąd: {transactionsQuery.error?.message}
+							</Text>
+						)}
+						{transactionsQuery.data?.map((tx) => (
+							<TransactionItem
+								key={tx.id}
+								shopName={tx.title}
+								date={new Date(tx.date).toLocaleDateString(
+									'pl-PL'
+								)}
+								amount={
+									tx.type === 'expense'
+										? tx.amount * -1
+										: tx.amount
+								}
+								onPress={() => {}}
+							/>
+						))}
+						{transactionsQuery.data?.length === 0 && (
+							<Text>Brak transakcji</Text>
+						)}
 					</View>
 				</View>
 			</SafeAreaView>

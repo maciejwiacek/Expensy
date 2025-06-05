@@ -53,6 +53,7 @@ const TabItem = ({ state, navigation }: BottomTabBarProps) => {
 						key={route.key}
 						onPress={onPress}
 						style={styles.tabButton}
+						hitSlop={10}
 					>
 						{tabIcon && tabIcon[route.name]}
 					</TouchableOpacity>
