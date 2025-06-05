@@ -3,12 +3,13 @@ import { DotsThreeOutline } from 'phosphor-react-native'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import BrandIcon from './BrandIcon'
-const Card = () => {
+const Card = ({ amount }: { amount: number }) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.leftSideContainer}>
 				<Text style={styles.amountText}>
-					154.845,72 <Text style={{ fontSize: 20 }}>PLN</Text>
+					{amount.toString()}{' '}
+					<Text style={{ fontSize: 20 }}>PLN</Text>
 				</Text>
 				<Text style={styles.cardNumberText}>**** **** **** 1234</Text>
 			</View>

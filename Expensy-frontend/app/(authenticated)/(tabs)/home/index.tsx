@@ -14,14 +14,14 @@ const Home = () => {
 	const userName = user?.username
 		? user.username.charAt(0).toUpperCase() + user.username.slice(1)
 		: 'Błąd użytkownika!'
-	const { data: transactions, isLoading, isError, error } = useTransactions()
+	const { transactionsQuery } = useTransactions()
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
 				<Text style={styles.titleText}>Witaj ponownie,</Text>
 				<Text style={styles.usernameText}>{userName}!</Text>
-				<Card />
+				<Card amount={123.45} />
 				<View style={styles.transactionsHeaderContainer}>
 					<Text style={styles.titleText}>Transakcje</Text>
 					<TextButton
@@ -30,9 +30,11 @@ const Home = () => {
 					/>
 				</View>
 				<View style={{ gap: 15 }}>
-					{isLoading && <Text>Ładowanie...</Text>}
-					{isError && <Text>Błąd: {error?.message}</Text>}
-					{transactions?.map((tx) => (
+					{transactionsQuery.isLoading && <Text>Ładowanie...</Text>}
+					{transactionsQuery.isError && (
+						<Text>Błąd: {transactionsQuery.error?.message}</Text>
+					)}
+					{transactionsQuery.data?.map((tx) => (
 						<TransactionItem
 							key={tx.id}
 							shopName={tx.title}
@@ -45,7 +47,9 @@ const Home = () => {
 							onPress={() => {}}
 						/>
 					))}
-					{transactions?.length === 0 && <Text>Brak transakcji</Text>}
+					{transactionsQuery.data?.length === 0 && (
+						<Text>Brak transakcji</Text>
+					)}
 				</View>
 			</View>
 			<View style={styles.fabContainer}>

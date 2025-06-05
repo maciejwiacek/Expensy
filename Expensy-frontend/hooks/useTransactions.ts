@@ -13,6 +13,7 @@ export const useTransactions = () => {
 	const { getToken } = useAuth()
 	const queryClient = useQueryClient()
 
+	// READ
 	const transactionsQuery = useQuery<Transaction[], Error>({
 		queryKey: ['transactions'],
 		queryFn: async () => {
@@ -22,6 +23,7 @@ export const useTransactions = () => {
 		},
 	})
 
+	// CREATE
 	const createMutation = useMutation<
 		Transaction,
 		Error,
@@ -38,10 +40,8 @@ export const useTransactions = () => {
 	})
 
 	return {
-		...transactionsQuery,
-		createTransaction: createMutation.mutate,
-		createTransactionAsync: createMutation.mutateAsync,
-		isCreating: createMutation.isPending,
+		transactionsQuery,
+		createTransaction: createMutation.mutateAsync,
 	}
 }
 
