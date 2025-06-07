@@ -3,6 +3,7 @@ import { DotsThreeOutline } from 'phosphor-react-native'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import BrandIcon from './BrandIcon'
+
 const Card = ({ amount }: { amount: number }) => {
 	return (
 		<View style={styles.container}>

@@ -1,4 +1,4 @@
-// This now matches your full form state, with all fields
+import axios from 'axios'
 export interface Transaction {
 	id: string
 	type: 'income' | 'expense'
@@ -25,28 +25,38 @@ export const createTransaction = async ({
 	token: string
 	data: CreateTransactionInput
 }): Promise<Transaction> => {
-	const res = await fetch(`http://192.168.50.54:3000/transactions`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`,
-		},
-		body: JSON.stringify(data),
-	})
-
-	if (!res.ok) throw new Error('Failed to create')
-	return res.json()
+	try {
+		const res = await axios.post<Transaction>(
+			'http://192.168.0.108:3000/transactions',
+			data,
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		)
+		return res.data
+	} catch (error) {
+		throw new Error('Failed to create transaction')
+	}
 }
 
 export const fetchTransactions = async (
 	token: string
 ): Promise<Transaction[]> => {
-	const res = await fetch(`http://192.168.50.54:3000/transactions`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	})
+	try {
+		const res = await axios.get<Transaction[]>(
+			'http://192.168.0.108:3000/transactions',
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		)
 
-	if (!res.ok) throw new Error('Failed to fetch')
-	return res.json()
+		return res.data
+	} catch (e) {
+		throw new Error('Failed to fetch transactions')
+	}
 }

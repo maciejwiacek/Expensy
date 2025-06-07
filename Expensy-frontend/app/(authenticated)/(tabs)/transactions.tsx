@@ -5,6 +5,7 @@ import { Colors } from '@/constants/Colors'
 import { useTransactions } from '@/hooks/useTransactions'
 import React, { useState } from 'react'
 import {
+	FlatList,
 	Keyboard,
 	SafeAreaView,
 	StyleSheet,
@@ -21,47 +22,56 @@ const Transactions = () => {
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<SafeAreaView style={styles.container}>
 				<View style={styles.content}>
-					<Text style={styles.headerTitle}>Transakcje</Text>
-					<View style={styles.searchBarContainer}>
-						<View style={{ flex: 1 }}>
-							<SearchBar
-								value={searchValue}
-								onChangeText={setSearchValue}
-							/>
-						</View>
-						<IconButton
-							icon={'filter'}
-							onPress={() => {}}
-							size={45}
-						/>
-					</View>
 					<View style={{ gap: 15 }}>
-						{transactionsQuery.isLoading && (
-							<Text>Ładowanie...</Text>
-						)}
-						{transactionsQuery.isError && (
-							<Text>
-								Błąd: {transactionsQuery.error?.message}
-							</Text>
-						)}
-						{transactionsQuery.data?.map((tx) => (
-							<TransactionItem
-								key={tx.id}
-								shopName={tx.title}
-								date={new Date(tx.date).toLocaleDateString(
-									'pl-PL'
-								)}
-								amount={
-									tx.type === 'expense'
-										? tx.amount * -1
-										: tx.amount
-								}
-								onPress={() => {}}
-							/>
-						))}
-						{transactionsQuery.data?.length === 0 && (
-							<Text>Brak transakcji</Text>
-						)}
+						<FlatList
+							data={transactionsQuery.data?.filter((item) =>
+								item.title
+									.toLowerCase()
+									.includes(searchValue.toLowerCase())
+							)}
+							renderItem={({ item }) => (
+								<TransactionItem
+									key={item.id}
+									shopName={item.title}
+									date={item.date}
+									amount={
+										item.type === 'expense'
+											? item.amount * -1
+											: item.amount
+									}
+									onPress={() => {}}
+								/>
+							)}
+							contentContainerStyle={{ gap: 15 }}
+							showsVerticalScrollIndicator={false}
+							ListHeaderComponent={() => (
+								<View
+									style={{
+										backgroundColor: 'white',
+										paddingTop: 24,
+									}}
+								>
+									<Text style={styles.headerTitle}>
+										Transakcje
+									</Text>
+									<View style={styles.searchBarContainer}>
+										<View style={{ flex: 1 }}>
+											<SearchBar
+												value={searchValue}
+												onChangeText={setSearchValue}
+											/>
+										</View>
+										<IconButton
+											icon={'filter'}
+											onPress={() => {}}
+											size={45}
+										/>
+									</View>
+								</View>
+							)}
+							stickyHeaderHiddenOnScroll={true}
+							stickyHeaderIndices={[0]}
+						/>
 					</View>
 				</View>
 			</SafeAreaView>
@@ -78,7 +88,6 @@ const styles = StyleSheet.create({
 	},
 	content: {
 		marginHorizontal: 24,
-		marginTop: 24,
 	},
 	headerTitle: {
 		fontFamily: 'Inter',

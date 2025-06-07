@@ -6,7 +6,7 @@ import { Colors } from '@/constants/Colors'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useUser } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 
 const Home = () => {
 	const { user } = useUser()
@@ -19,38 +19,42 @@ const Home = () => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.content}>
-				<Text style={styles.titleText}>Witaj ponownie,</Text>
-				<Text style={styles.usernameText}>{userName}!</Text>
-				<Card amount={123.45} />
-				<View style={styles.transactionsHeaderContainer}>
-					<Text style={styles.titleText}>Transakcje</Text>
-					<TextButton
-						title={'Zobacz wszystkie'}
-						onPress={() => router.navigate('/transactions')}
-					/>
-				</View>
-				<View style={{ gap: 15 }}>
-					{transactionsQuery.isLoading && <Text>Ładowanie...</Text>}
-					{transactionsQuery.isError && (
-						<Text>Błąd: {transactionsQuery.error?.message}</Text>
-					)}
-					{transactionsQuery.data?.map((tx) => (
+				<FlatList
+					data={transactionsQuery.data || []}
+					renderItem={({ item }) => (
 						<TransactionItem
-							key={tx.id}
-							shopName={tx.title}
-							date={new Date(tx.date).toLocaleDateString('pl-PL')}
+							key={item.id}
+							shopName={item.title}
+							date={item.date}
 							amount={
-								tx.type === 'expense'
-									? tx.amount * -1
-									: tx.amount
+								item.type === 'expense'
+									? item.amount * -1
+									: item.amount
 							}
 							onPress={() => {}}
 						/>
-					))}
-					{transactionsQuery.data?.length === 0 && (
-						<Text>Brak transakcji</Text>
 					)}
-				</View>
+					contentContainerStyle={{ gap: 15, paddingBottom: 100 }}
+					showsVerticalScrollIndicator={false}
+					ListHeaderComponent={() => (
+						<>
+							<Text style={styles.titleText}>
+								Witaj ponownie,
+							</Text>
+							<Text style={styles.usernameText}>{userName}!</Text>
+							<Card amount={123.45} />
+							<View style={styles.transactionsHeaderContainer}>
+								<Text style={styles.titleText}>Transakcje</Text>
+								<TextButton
+									title={'Zobacz wszystkie'}
+									onPress={() =>
+										router.navigate('/transactions')
+									}
+								/>
+							</View>
+						</>
+					)}
+				/>
 			</View>
 			<View style={styles.fabContainer}>
 				<IconButton
@@ -75,6 +79,7 @@ const styles = StyleSheet.create({
 	content: {
 		marginHorizontal: 24,
 		marginTop: 24,
+		flex: 1,
 	},
 	titleText: {
 		fontFamily: 'Inter',
@@ -93,7 +98,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'baseline',
 		justifyContent: 'space-between',
-		marginBottom: 25,
+		marginBottom: 10,
 		marginTop: 30,
 	},
 	fabContainer: {
