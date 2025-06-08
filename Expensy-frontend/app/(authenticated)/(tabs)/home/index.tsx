@@ -61,7 +61,8 @@ const Home = () => {
 					icon={'plus'}
 					size={50}
 					onPress={() => {
-						router.push('/add-transaction/add-manually')
+						// router.push('/add-transaction/add-manually')
+						router.push('/add-transaction/scan-receipt')
 					}}
 				/>
 			</View>

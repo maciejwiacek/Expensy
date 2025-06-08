@@ -8,6 +8,10 @@ const Layout = () => {
 				name='add-transaction/add-manually'
 				options={{ headerShown: false }}
 			/>
+			<Stack.Screen
+				name='add-transaction/scan-receipt'
+				options={{ headerShown: false }}
+			/>
 		</Stack>
 	)
 }

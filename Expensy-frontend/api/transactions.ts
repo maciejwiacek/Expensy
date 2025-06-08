@@ -27,7 +27,7 @@ export const createTransaction = async ({
 }): Promise<Transaction> => {
 	try {
 		const res = await axios.post<Transaction>(
-			'http://192.168.0.108:3000/transactions',
+			'http://192.168.50.54:3000/transactions',
 			data,
 			{
 				headers: {
@@ -47,7 +47,7 @@ export const fetchTransactions = async (
 ): Promise<Transaction[]> => {
 	try {
 		const res = await axios.get<Transaction[]>(
-			'http://192.168.0.108:3000/transactions',
+			'http://192.168.50.54:3000/transactions',
 			{
 				headers: {
 					Authorization: `Bearer ${token}`,
