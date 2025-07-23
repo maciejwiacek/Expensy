@@ -17,7 +17,7 @@ const CustomInput = ({
   secureTextEntry = false,
 }: CustomInputProps) => {
   return (
-    <View>
+    <View className='gap-2'>
       <Text className='font-semibold'>{label}</Text>
       <TextInput
         className='border border-neutral-300 focus:border-blue-500 p-4 rounded-2xl'

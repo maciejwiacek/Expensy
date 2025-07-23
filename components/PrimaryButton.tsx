@@ -9,7 +9,7 @@ type PrimaryButtonProps = {
 const PrimaryButton = ({ title, onPress }: PrimaryButtonProps) => {
   return (
     <TouchableOpacity
-      className='bg-blue-600 h-12 w-full rounded-2xl items-center justify-center'
+      className='bg-blue-600 h-14 w-full rounded-2xl items-center justify-center'
       onPress={onPress}
     >
       <Text className='text-white font-semibold'>{title}</Text>

@@ -1,8 +1,10 @@
 import CustomInput from '@/components/CustomInput'
 import PrimaryButton from '@/components/PrimaryButton'
 import { useAuth } from '@/context/useAuth'
+import { Link } from 'expo-router'
 import { useState } from 'react'
-import { Button, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+
 const Register = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -10,8 +12,6 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
 
   const { register } = useAuth()
-
-  const API_KEY = process.env.EXPO_PUBLIC_FIREBASE_API_KEY
 
   const handleRegister = async () => {
     try {
@@ -25,17 +25,10 @@ const Register = () => {
   return (
     <View className='flex-1 justify-between my-16 mx-4'>
       <View>
-        <Text className='text-2xl font-bold'>Zarejestruj się!</Text>
+        <Text className='text-2xl font-bold mt-8'>Zarejestruj się!</Text>
         <Text className='text-neutral-500'>
           Załóż konto, aby dołączyć do Expensy!
         </Text>
-
-        <Button
-          title='Test'
-          onPress={() => {
-            console.log(`API Key: ${API_KEY}`)
-          }}
-        />
 
         <View className='mt-8 gap-5'>
           <CustomInput
@@ -67,7 +60,15 @@ const Register = () => {
         </View>
       </View>
 
-      <PrimaryButton title='Zarejestruj się' onPress={handleRegister} />
+      <View>
+        <PrimaryButton title='Zarejestruj się' onPress={handleRegister} />
+        <View className='flex-row justify-center mt-4'>
+          <Text>Masz już konto? </Text>
+          <Link href='/login' className='text-blue-500 font-semibold'>
+            Zaloguj się
+          </Link>
+        </View>
+      </View>
     </View>
   )
 }

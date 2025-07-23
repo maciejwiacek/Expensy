@@ -9,9 +9,18 @@ const Home = () => {
     logout()
   }
 
+  if (!user) return null
+
   return (
-    <View>
-      <Text>Hello, {user?.displayName}</Text>
+    <View className='my-16 mx-4'>
+      <Text className='text-xl font-semibold'>Witaj ponownie,</Text>
+      <Text className='text-2xl font-bold'>
+        {user?.displayName?.slice(0, 1).toUpperCase() +
+          user?.displayName?.slice(1)}
+        !
+      </Text>
+      <Text>Twoje saldo</Text>
+      <Text>123.456,78 PLN</Text>
       <Button title='Logout' onPress={handleLogout} />
     </View>
   )
