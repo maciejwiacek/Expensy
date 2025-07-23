@@ -1,65 +1,43 @@
 import CustomInput from '@/components/CustomInput'
 import PrimaryButton from '@/components/PrimaryButton'
 import { useAuth } from '@/context/useAuth'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 
 const Login = () => {
-  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
 
-  const { register } = useAuth()
+  const { login } = useAuth()
 
-  const handleRegister = async () => {
+  const handleLogin = async () => {
     try {
-      await register(username, email, password, confirmPassword)
+      await login(email, password)
     } catch (error) {
-      console.error('Registration error:', error)
-      alert('Rejestracja nie powiodła się. Spróbuj ponownie.')
+      console.error('Login error:', error)
+      alert('Błąd logowania')
     }
   }
 
   return (
     <View className='flex-1 justify-between my-16 mx-4'>
       <View>
-        <Text className='text-2xl font-bold'>Zarejestruj się!</Text>
-        <Text className='text-neutral-500'>
-          Załóż konto, aby dołączyć do Expensy!
-        </Text>
-
-        <View className='mt-8 gap-5'>
-          <CustomInput
-            label='Nazwa Użytkownika'
-            placeholder='Podaj nazwę użytkownika'
-            value={username}
-            onChangeText={setUsername}
-          />
-          <CustomInput
-            label='E-mail'
-            placeholder='Podaj adres e-mail'
-            value={email}
-            onChangeText={setEmail}
-          />
-          <CustomInput
-            label='Hasło'
-            placeholder='Podaj hasło'
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <CustomInput
-            label='Potwierdź Hasło'
-            placeholder='Potwierdź hasło'
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-          />
-        </View>
+        <Text>Witaj w Expensy!</Text>
+        <CustomInput
+          label='E-mail'
+          placeholder='Podaj adres e-mail'
+          value={email}
+          onChangeText={setEmail}
+        />
+        <CustomInput
+          label='Hasło'
+          placeholder='Podaj hasło'
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
       </View>
-
-      <PrimaryButton title='Zarejestruj się' onPress={handleRegister} />
+      <PrimaryButton title='Zaloguj się' onPress={handleLogin} />
     </View>
   )
 }
