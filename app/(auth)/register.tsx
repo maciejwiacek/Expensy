@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { Text, View } from 'react-native'
 
 const Register = () => {
-  const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -15,7 +15,7 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      await register(username, email, password, confirmPassword)
+      await register(name, email, password, confirmPassword)
     } catch (error) {
       console.error('Registration error:', error)
       alert('Rejestracja nie powiodła się. Spróbuj ponownie.')
@@ -32,10 +32,10 @@ const Register = () => {
 
         <View className='mt-8 gap-5'>
           <CustomInput
-            label='Nazwa Użytkownika'
-            placeholder='Podaj nazwę użytkownika'
-            value={username}
-            onChangeText={setUsername}
+            label='Imię'
+            placeholder='Podaj swoje imię'
+            value={name}
+            onChangeText={setName}
           />
           <CustomInput
             label='E-mail'

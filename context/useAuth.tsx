@@ -14,7 +14,7 @@ type AuthContextType = {
   loading: boolean
   login: (email: string, password: string) => Promise<void>
   register: (
-    username: string,
+    name: string,
     email: string,
     password: string,
     confirmPassword: string
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const register = async (
-    username: string,
+    name: string,
     email: string,
     password: string,
     confirmPassword: string
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       password
     )
     await updateProfile(userCredential.user, {
-      displayName: username,
+      displayName: name,
     })
   }
 

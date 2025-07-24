@@ -1,27 +1,32 @@
-import { useAuth } from '@/context/useAuth'
+import FloatingActionButton from '@/components/FloatingActionButton'
+import TransactionItem from '@/components/TransactionItem'
+import { useRouter } from 'expo-router'
 import React from 'react'
-import { Button, Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 const Home = () => {
-  const { user, logout } = useAuth()
-
-  const handleLogout = () => {
-    logout()
-  }
-
-  if (!user) return null
+  const router = useRouter()
 
   return (
-    <View className='my-16 mx-4'>
-      <Text className='text-xl font-semibold'>Witaj ponownie,</Text>
-      <Text className='text-2xl font-bold'>
-        {user?.displayName?.slice(0, 1).toUpperCase() +
-          user?.displayName?.slice(1)}
-        !
-      </Text>
-      <Text>Twoje saldo</Text>
-      <Text>123.456,78 PLN</Text>
-      <Button title='Logout' onPress={handleLogout} />
+    <View className='flex-1 bg-white relative'>
+      <FloatingActionButton />
+
+      <View className='mt-24 mb-16 mx-4'>
+        <View>
+          <Text className='text-lg font-semibold'>Twoje saldo</Text>
+          <Text className='text-3xl font-bold'>123.456,78 PLN</Text>
+        </View>
+
+        {/* Transactions header */}
+        <View className='flex-row justify-between items-center my-6'>
+          <Text className='text-lg font-semibold'>Transakcje</Text>
+          <TouchableOpacity onPress={() => router.push('/transactions')}>
+            <Text className='text-sm text-neutral-700'>Zobacz wszystkie</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TransactionItem />
+      </View>
     </View>
   )
 }
