@@ -1,21 +1,31 @@
-import CustomInput from '@/components/CustomInput'
+import FormInput from '@/components/FormInput'
 import PrimaryButton from '@/components/PrimaryButton'
 import { useAuth } from '@/context/useAuth'
+import registerSchema from '@/lib/schemas/registerSchema'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Link } from 'expo-router'
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { Text, View } from 'react-native'
 
-const Register = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+type RegisterFormValues = {
+  name: string
+  email: string
+  password: string
+  confirmPassword: string
+}
 
+const Register = () => {
   const { register } = useAuth()
 
-  const handleRegister = async () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormValues>({ resolver: yupResolver(registerSchema) })
+
+  const handleRegister = async (data: RegisterFormValues) => {
     try {
-      await register(name, email, password, confirmPassword)
+      await register(data.name, data.email, data.password, data.confirmPassword)
     } catch (error) {
       console.error('Registration error:', error)
       alert('Rejestracja nie powiodła się. Spróbuj ponownie.')
@@ -31,37 +41,44 @@ const Register = () => {
         </Text>
 
         <View className='mt-8 gap-5'>
-          <CustomInput
+          <FormInput<RegisterFormValues>
+            name='name'
+            control={control}
+            errors={errors}
             label='Imię'
             placeholder='Podaj swoje imię'
-            value={name}
-            onChangeText={setName}
           />
-          <CustomInput
+          <FormInput<RegisterFormValues>
+            name='email'
+            control={control}
+            errors={errors}
             label='E-mail'
             placeholder='Podaj adres e-mail'
-            value={email}
-            onChangeText={setEmail}
           />
-          <CustomInput
+          <FormInput<RegisterFormValues>
+            name='password'
+            control={control}
+            errors={errors}
             label='Hasło'
             placeholder='Podaj hasło'
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
+            inputProps={{ secureTextEntry: true, textContentType: 'none' }}
           />
-          <CustomInput
+          <FormInput<RegisterFormValues>
+            name='confirmPassword'
+            control={control}
+            errors={errors}
             label='Potwierdź Hasło'
             placeholder='Potwierdź hasło'
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
+            inputProps={{ secureTextEntry: true, textContentType: 'none' }}
           />
         </View>
       </View>
 
       <View>
-        <PrimaryButton title='Zarejestruj się' onPress={handleRegister} />
+        <PrimaryButton
+          title='Zarejestruj się'
+          onPress={handleSubmit(handleRegister)}
+        />
         <View className='flex-row justify-center mt-4'>
           <Text>Masz już konto? </Text>
           <Link href='/login' className='text-blue-500 font-semibold'>
