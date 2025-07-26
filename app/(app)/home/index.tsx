@@ -7,12 +7,13 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 const Home = () => {
   const router = useRouter()
 
-  const transactions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Example data
+  const transactions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   return (
     <View className='flex-1 bg-white relative'>
-      {/* FloatingActionButton stays fixed */}
-      <FloatingActionButton />
+      <FloatingActionButton
+        onPress={() => router.push('/(app)/home/addExpense')}
+      />
 
       <View className='flex-1 mt-24 mx-4'>
         <View className='bg-white pb-4'>

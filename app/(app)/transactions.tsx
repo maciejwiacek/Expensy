@@ -1,7 +1,7 @@
 import TransactionItem from '@/components/TransactionItem'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import React from 'react'
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 const Transactions = () => {
   return (
@@ -18,7 +18,13 @@ const Transactions = () => {
         </TouchableOpacity>
       </View>
 
-      <TransactionItem />
+      <FlatList
+        data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+        renderItem={() => <TransactionItem />}
+        keyExtractor={(item) => item.toString()}
+        contentContainerStyle={{ gap: 14, flexGrow: 1, paddingBottom: 14 }}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   )
 }

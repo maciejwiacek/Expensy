@@ -8,20 +8,19 @@ export default function Layout() {
         options={{
           title: 'Strona Główna',
           headerShown: false,
-          animation: 'fade',
         }}
       />
       <Tabs.Screen
         name='transactions'
-        options={{ title: 'Transakcje', headerShown: false, animation: 'fade' }}
+        options={{ title: 'Transakcje', headerShown: false }}
       />
       <Tabs.Screen
         name='analytics'
-        options={{ title: 'Analiza', headerShown: false, animation: 'fade' }}
+        options={{ title: 'Analiza', headerShown: false }}
       />
       <Tabs.Screen
         name='profile'
-        options={{ title: 'Profil', headerShown: false, animation: 'fade' }}
+        options={{ title: 'Profil', headerShown: false }}
       />
     </Tabs>
   )
