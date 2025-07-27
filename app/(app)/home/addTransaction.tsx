@@ -1,20 +1,14 @@
 import FormInput from '@/components/FormInput'
 import Heading from '@/components/Heading'
 import SelectableButton from '@/components/SelectableButton'
+import { useCreateTransaction } from '@/lib/firebase/transactions/useTransactions'
+import { TTransaction } from '@/lib/types/transaction'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
 
-type TExpense = {
-  type: 'income' | 'expense'
-  name: string
-  amount: number
-  category: string
-  description?: string
-}
-
-const AddExpense = () => {
+const AddTransaction = () => {
   const router = useRouter()
 
   const {
@@ -23,18 +17,24 @@ const AddExpense = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<TExpense>({
+  } = useForm<TTransaction>({
     defaultValues: {
       type: 'expense',
     },
   })
-
   const transactionType = watch('type')
 
-  const handleAddPress = () => {
-    // Logic to handle adding an expense
+  const createMutation = useCreateTransaction()
 
-    router.back()
+  const handleAddPress = (data: TTransaction) => {
+    createMutation.mutate(data, {
+      onSuccess: () => {
+        router.back()
+      },
+      onError: (error) => {
+        alert(`Wystąpił błąd podczas dodawania transakcji. ${error}`)
+      },
+    })
   }
 
   return (
@@ -46,22 +46,22 @@ const AddExpense = () => {
       />
 
       <View className='flex-1 mt-10 gap-6'>
-        <View className='flex-row justify-between gap-6'>
-          <SelectableButton
-            label='Przychód'
-            value='income'
-            selectedValue={transactionType}
-            onSelect={(value) => setValue('type', value)}
-          />
+        <View className='flex-row justify-between gap-4'>
           <SelectableButton
             label='Wydatek'
             value='expense'
             selectedValue={transactionType}
             onSelect={(value) => setValue('type', value)}
           />
+          <SelectableButton
+            label='Przychód'
+            value='income'
+            selectedValue={transactionType}
+            onSelect={(value) => setValue('type', value)}
+          />
         </View>
 
-        <FormInput<TExpense>
+        <FormInput<TTransaction>
           control={control}
           name='name'
           label='Nazwa'
@@ -69,7 +69,7 @@ const AddExpense = () => {
           errors={errors}
         />
 
-        <FormInput<TExpense>
+        <FormInput<TTransaction>
           control={control}
           name='amount'
           label='Kwota'
@@ -78,7 +78,7 @@ const AddExpense = () => {
           inputProps={{ keyboardType: 'numeric' }}
         />
 
-        <FormInput<TExpense>
+        <FormInput<TTransaction>
           control={control}
           name='category'
           label='Kategoria'
@@ -86,7 +86,7 @@ const AddExpense = () => {
           errors={errors}
         />
 
-        <FormInput<TExpense>
+        <FormInput<TTransaction>
           control={control}
           name='description'
           label='Opis (opcjonalnie)'
@@ -98,4 +98,4 @@ const AddExpense = () => {
     </View>
   )
 }
-export default AddExpense
+export default AddTransaction

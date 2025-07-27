@@ -35,7 +35,13 @@ const Layout = () => {
     <Stack>
       <Stack.Screen name='index' options={{ headerShown: false }} />
       <Stack.Screen
-        name='addExpense'
+        name='addTransaction'
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name='[id]'
         options={{
           headerShown: false,
         }}

@@ -1,18 +1,23 @@
 import FloatingActionButton from '@/components/FloatingActionButton'
 import TransactionItem from '@/components/TransactionItem'
+import { useTransactions } from '@/lib/firebase/transactions/useTransactions'
 import { useRouter } from 'expo-router'
 import React from 'react'
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
+import Animated, {
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+} from 'react-native-reanimated'
 
 const Home = () => {
   const router = useRouter()
-
-  const transactions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  const { data: transactions } = useTransactions()
 
   return (
     <View className='flex-1 bg-white relative'>
       <FloatingActionButton
-        onPress={() => router.push('/(app)/home/addExpense')}
+        onPress={() => router.push('/(app)/home/addTransaction')}
       />
 
       <View className='flex-1 mt-24 mx-4'>
@@ -21,10 +26,9 @@ const Home = () => {
           <Text className='text-3xl font-bold'>123.456,78 PLN</Text>
         </View>
 
-        <FlatList
+        <Animated.FlatList
           data={transactions}
-          renderItem={({ item }) => <TransactionItem />}
-          keyExtractor={(item) => item.toString()}
+          keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             gap: 14,
@@ -41,6 +45,16 @@ const Home = () => {
               </TouchableOpacity>
             </View>
           }
+          renderItem={({ item }) => (
+            <Animated.View
+              layout={LinearTransition}
+              entering={FadeIn}
+              exiting={FadeOut}
+              className='rounded-2xl overflow-hidden'
+            >
+              <TransactionItem transaction={item} />
+            </Animated.View>
+          )}
         />
       </View>
     </View>
