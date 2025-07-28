@@ -7,7 +7,6 @@ import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeabl
 
 type TransactionItemProps = {
   transaction: TTransaction
-  onDelete: () => void
 }
 
 const TransactionItem = ({ transaction }: TransactionItemProps) => {
@@ -39,16 +38,22 @@ const TransactionItem = ({ transaction }: TransactionItemProps) => {
 
         <View className='flex-row justify-between items-center flex-1 p-4'>
           <View className='gap-1'>
-            <Text className='font-bold'>{transaction.name}</Text>
+            <Text
+              className='font-bold max-w-44'
+              numberOfLines={1}
+              ellipsizeMode='tail'
+            >
+              {transaction.name}
+            </Text>
             <Text className='text-sm text-neutral-700'>123</Text>
           </View>
           <Text
-            className={`${
+            className={`font-bold ${
               transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-            } font-bold`}
+            }`}
           >
-            {transaction.type === 'income' ? '+' : '-'}
-            {transaction.amount}
+            {transaction.type === 'income' ? '' : '-'}
+            {transaction.amount.toFixed(2)}
             PLN
           </Text>
         </View>

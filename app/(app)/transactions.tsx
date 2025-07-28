@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
+import Animated, { LinearTransition } from 'react-native-reanimated'
 
 const Transactions = () => {
   const { data: transactions } = useTransactions()
@@ -38,7 +39,12 @@ const Transactions = () => {
             tx.name.toLowerCase().includes(searchQuery.toLowerCase())
           )}
           renderItem={({ item }) => (
-            <TransactionItem key={item.id} transaction={item} />
+            <Animated.View
+              layout={LinearTransition}
+              className='rounded-2xl overflow-hidden'
+            >
+              <TransactionItem key={item.id} transaction={item} />
+            </Animated.View>
           )}
           contentContainerStyle={{ gap: 14, flexGrow: 1, paddingBottom: 14 }}
           showsVerticalScrollIndicator={false}

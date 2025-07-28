@@ -20,6 +20,7 @@ const AddTransaction = () => {
   } = useForm<TTransaction>({
     defaultValues: {
       type: 'expense',
+      amount: 0,
     },
   })
   const transactionType = watch('type')
@@ -27,14 +28,27 @@ const AddTransaction = () => {
   const createMutation = useCreateTransaction()
 
   const handleAddPress = (data: TTransaction) => {
-    createMutation.mutate(data, {
-      onSuccess: () => {
-        router.back()
-      },
-      onError: (error) => {
-        alert(`Wystąpił błąd podczas dodawania transakcji. ${error}`)
-      },
-    })
+    const sanitizedAmount =
+      typeof data.amount === 'string'
+        ? Number((data.amount as string).replace(',', '.'))
+        : data.amount
+
+    if (isNaN(sanitizedAmount)) {
+      alert('Kwota musi być liczbą')
+      return
+    }
+
+    createMutation.mutate(
+      { ...data, amount: sanitizedAmount },
+      {
+        onSuccess: () => {
+          router.back()
+        },
+        onError: (error) => {
+          alert(`Wystąpił błąd podczas dodawania transakcji. ${error}`)
+        },
+      }
+    )
   }
 
   return (
@@ -67,6 +81,7 @@ const AddTransaction = () => {
           label='Nazwa'
           placeholder='Podaj nazwę transakcji'
           errors={errors}
+          inputProps={{ maxLength: 25 }}
         />
 
         <FormInput<TTransaction>
