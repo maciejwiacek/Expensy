@@ -1,6 +1,8 @@
 import FilterBottomSheet from '@/components/FilterBottomSheet'
 import TransactionItem from '@/components/TransactionItem'
+import { SortOption } from '@/enums/sortOptions'
 import { useTransactions } from '@/lib/firebase/transactions/useTransactions'
+import { sortTransactions } from '@/utils/sortTransactions'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import React, { useRef, useState } from 'react'
@@ -19,10 +21,18 @@ const Transactions = () => {
   const { data: transactions } = useTransactions()
   const [searchQuery, setSearchQuery] = useState('')
   const bottomSheetRef = useRef<BottomSheetModal>(null)
+  const [sortOption, setSortOption] = useState<SortOption>(SortOption.NAME_ASC)
 
   const openFilterSheet = () => {
     bottomSheetRef.current?.present()
   }
+
+  const sortedTransactions = sortTransactions(
+    transactions?.filter((tx) =>
+      tx.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [],
+    sortOption
+  )
 
   return (
     <>
@@ -46,9 +56,7 @@ const Transactions = () => {
           </View>
 
           <FlatList
-            data={transactions?.filter((tx) =>
-              tx.name.toLowerCase().includes(searchQuery.toLowerCase())
-            )}
+            data={sortedTransactions}
             renderItem={({ item }) => (
               <Animated.View
                 layout={LinearTransition}
@@ -64,7 +72,14 @@ const Transactions = () => {
         </View>
       </TouchableWithoutFeedback>
 
-      <FilterBottomSheet ref={bottomSheetRef} />
+      <FilterBottomSheet
+        ref={bottomSheetRef}
+        currentSort={sortOption}
+        onSortChange={(option) => {
+          setSortOption(option)
+          bottomSheetRef.current?.dismiss()
+        }}
+      />
     </>
   )
 }

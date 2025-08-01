@@ -1,12 +1,22 @@
+import { SortOption } from '@/enums/sortOptions'
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import React, { forwardRef, useMemo } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, TouchableOpacity } from 'react-native'
 
-// Optional props — extend later if needed
-type FilterBottomSheetProps = {}
+const sortOptions = [
+  { label: 'Kwota rosnąco', value: SortOption.AMOUNT_ASC },
+  { label: 'Kwota malejąco', value: SortOption.AMOUNT_DESC },
+  { label: 'Nazwa A-Z', value: SortOption.NAME_ASC },
+  { label: 'Nazwa Z-A', value: SortOption.NAME_DESC },
+]
+
+type FilterBottomSheetProps = {
+  currentSort: SortOption
+  onSortChange: (option: SortOption) => void
+}
 
 const FilterBottomSheet = forwardRef<BottomSheetModal, FilterBottomSheetProps>(
-  function FilterBottomSheetComponent(_props, ref) {
+  function FilterBottomSheetComponent({ currentSort, onSortChange }, ref) {
     const snapPoints = useMemo(() => ['25%', '75%'], [])
 
     return (
@@ -25,24 +35,23 @@ const FilterBottomSheet = forwardRef<BottomSheetModal, FilterBottomSheetProps>(
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            className='flex-row gap-x-4'
+            className='flex-row'
           >
-            <View className='h-14 w-40 justify-center items-center rounded-2xl bg-blue-600'>
-              <Text className='text-white font-medium text-lg'>Kwoty</Text>
-            </View>
-
-            <View className='h-14 w-40 justify-center items-center rounded-2xl bg-blue-600'>
-              <Text className='text-white font-medium text-lg'>Kwoty</Text>
-            </View>
-            <View className='h-14 w-40 justify-center items-center rounded-2xl bg-blue-600'>
-              <Text className='text-white font-medium text-lg'>Kwoty</Text>
-            </View>
-            <View className='h-14 w-40 justify-center items-center rounded-2xl bg-blue-600'>
-              <Text className='text-white font-medium text-lg'>Kwoty</Text>
-            </View>
-            <View className='h-14 w-40 justify-center items-center rounded-2xl bg-blue-600'>
-              <Text className='text-white font-medium text-lg'>Kwoty</Text>
-            </View>
+            {sortOptions.map((option, index) => (
+              <TouchableOpacity
+                key={option.value}
+                className={`h-14 w-40 justify-center items-center rounded-2xl
+                  ${index - 1 < sortOptions.length ? 'mr-4' : ''}
+                  ${currentSort === option.value ? 'bg-blue-700 border-none' : 'bg-none border border-gray-600'}`}
+                onPress={() => onSortChange(option.value)}
+              >
+                <Text
+                  className={`font-medium text-lg ${currentSort === option.value ? 'text-white' : 'text-gray-600'}`}
+                >
+                  {option.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </BottomSheetView>
       </BottomSheetModal>
