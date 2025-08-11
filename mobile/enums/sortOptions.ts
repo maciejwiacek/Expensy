@@ -1,0 +1,8 @@
+export enum SortOption {
+  DATE_ASC = 'DATE_ASC',
+  DATE_DESC = 'DATE_DESC',
+  NAME_ASC = 'NAME_ASC',
+  NAME_DESC = 'NAME_DESC',
+  AMOUNT_ASC = 'AMOUNT_ASC',
+  AMOUNT_DESC = 'AMOUNT_DESC',
+}
