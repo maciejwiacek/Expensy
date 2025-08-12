@@ -40,6 +40,7 @@ const Layout = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen name='scanReceipt' options={{ headerShown: false }} />
       <Stack.Screen
         name='[id]'
         options={{
