@@ -21,7 +21,7 @@ export const parseReceiptData = async (ocrResult) => {
         json
         {
         "shopName": "", // normalized shop name, e.g., "ROSSMANN", "Biedronka", "Lidl"
-        "date": "", // date of receipt, format: YYYY-MM-DD
+        "date": "", // date of receipt, format: YYYY-MM-DD HH:MM
         "products": [
             {
             "name": "", // normalized product name
@@ -32,6 +32,8 @@ export const parseReceiptData = async (ocrResult) => {
         }
         If there are mistakes in OCR (e.g., misspelled names), correct them. Do not include products or lines that are not products. Output only valid JSON and all text and keys in Polish.
 
+        Return only valid JSON without any backticks, code fences, or extra text.
+
         Here is the OCR result:
 
         text
@@ -39,5 +41,7 @@ export const parseReceiptData = async (ocrResult) => {
     `,
   })
 
-  return response.text
+  const cleaned = response.text.replace(/```json|```/g, '').trim()
+
+  return JSON.parse(cleaned)
 }

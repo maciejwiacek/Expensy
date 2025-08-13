@@ -1,51 +1,61 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import Heading from '@/components/Heading'
 import { CameraView, useCameraPermissions } from 'expo-camera'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import * as ImagePicker from 'expo-image-picker'
+import { processImage } from '@/utils/processImage'
 
 const ScanReceipt = () => {
   const [permission, requestPermission] = useCameraPermissions()
   const [flashMode, setFlashMode] = useState(false)
   const cameraRef = useRef<CameraView>(null)
 
+  useEffect(() => {
+    requestPermission()
+  }, [])
+
   const handleTakePicture = async () => {
-    if (cameraRef.current) {
+    if (!cameraRef.current) return
+
+    try {
       const photo = await cameraRef.current.takePictureAsync({
         quality: 0.5,
       })
 
-      const localUri = photo.uri
-      const filename = localUri.split('/').pop() || 'photo.jpg'
-      const match = /\.(\w+)$/.exec(filename)
-      const type = match ? `image/${match[1]}` : 'image'
+      const data = await processImage(photo.uri)
+      console.log('Processed data:', data)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
 
-      const formData = new FormData()
-      formData.append('file', {
-        uri: localUri,
-        name: filename,
-        type: type,
-      } as any)
+      Alert.alert(
+        'Error',
+        `Failed to take picture. Please try again. ${message}`
+      )
+    }
+  }
 
-      try {
-        const response = await fetch('http://10.18.200.51:3000/api/receipts/', {
-          method: 'POST',
-          body: formData,
-        })
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        const data = await response.json()
-        console.log('Upload successful:', data)
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error)
+  const handlePickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5,
+      })
 
-        Alert.alert(
-          'Error',
-          `Failed to upload the photo. Please try again. ${message}`
-        )
-      }
+      if (result.canceled) return
+
+      const data = await processImage(result.assets[0].uri)
+      console.log('Processed data from picked image:', data)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+
+      Alert.alert(
+        'Error',
+        `Failed to take picture. Please try again. ${message}`
+      )
     }
   }
 
@@ -82,7 +92,9 @@ const ScanReceipt = () => {
         <TouchableOpacity onPress={handleTakePicture}>
           <FontAwesome6 name='camera' size={60} color='#3b82f6' />
         </TouchableOpacity>
-        <FontAwesome6 name='photo-film' size={40} color='#3b82f6' />
+        <TouchableOpacity onPress={handlePickImage}>
+          <FontAwesome6 name='photo-film' size={40} color='#3b82f6' />
+        </TouchableOpacity>
       </View>
     </View>
   )
