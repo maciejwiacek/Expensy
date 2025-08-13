@@ -33,6 +33,18 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "This app uses the camera to scan receipts."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photoPermission": "This app uses the media library to save scanned receipts."
+        }
       ]
     ],
     "experiments": {

@@ -1,8 +1,8 @@
 import client from '../config/google-vision.js'
 import ai from '../config/gemini-ai.js'
 
-export const getReceiptData = async (receiptImage) => {
-  const imageBuffer = Buffer.from(receiptImage, 'base64')
+export const getReceiptData = async (data) => {
+  const imageBuffer = await data.buffer
 
   const [result] = await client.textDetection({
     image: { content: imageBuffer },
