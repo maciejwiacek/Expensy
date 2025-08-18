@@ -14,7 +14,7 @@ const FloatingActionMenu = ({ isActive, onClose }: FloatingActionMenuProps) => {
     <>
       <TouchableOpacity
         onPress={() => {
-          router.push('/(app)/home/scanReceipt')
+          router.push('/(transactions)/scanReceipt')
           onClose()
         }}
         className={`absolute bottom-[80px] right-6 ${isActive ? 'flex' : 'hidden'} bg-blue-500 py-4 w-[200px] rounded-full flex-row items-center justify-center gap-4 z-50`}
@@ -25,7 +25,7 @@ const FloatingActionMenu = ({ isActive, onClose }: FloatingActionMenuProps) => {
 
       <TouchableOpacity
         onPress={() => {
-          router.push('/(app)/home/addTransaction')
+          router.push('/(transactions)/addTransaction')
           onClose()
         }}
         className={`absolute bottom-[140px] right-6 ${isActive ? 'flex' : 'hidden'} bg-blue-500 py-4 w-[200px] rounded-full flex-row items-center justify-center gap-4 z-50`}

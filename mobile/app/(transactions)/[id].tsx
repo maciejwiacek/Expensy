@@ -1,19 +1,19 @@
 import Heading from '@/components/Heading'
-import { useTransaction } from '@/lib/firebase/transactions/useTransactions'
+import { useBudgetItem } from '@/firebase/transactions/useBudgetItems'
 import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
 import { View } from 'react-native'
 
 const TransactionDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>()
-  const { data: transaction } = useTransaction(id)
+  const { data: item } = useBudgetItem(id)
 
-  if (!transaction) return null
+  if (!item) return null
 
   return (
     <View className='flex-1 bg-white pt-20 px-4'>
       <Heading
-        title={transaction?.name}
+        title={item.type === 'receipt' ? item.shopName : item.name}
         buttonLabel='Edytuj'
         onPress={() => {}}
       />

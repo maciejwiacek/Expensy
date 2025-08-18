@@ -43,10 +43,10 @@ export const parseReceiptData = async (ocrResult) => {
 
   const cleaned = response.text.replace(/```json|```/g, '').trim()
   const data = JSON.parse(cleaned)
-  const totalSum = data.products.reduce(
+  const amount = data.products.reduce(
     (sum, product) => sum + product.price * product.quantity,
     0
   )
 
-  return { ...data, totalSum }
+  return { ...data, amount }
 }

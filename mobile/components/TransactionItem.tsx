@@ -1,20 +1,20 @@
-import { useDeleteTransaction } from '@/lib/firebase/transactions/useTransactions'
-import { TTransaction } from '@/lib/types/transaction'
+import { TBudgetItem } from '@/types/transaction'
+import { useDeleteBudgetItem } from '@/firebase/transactions/useBudgetItems'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 
 type TransactionItemProps = {
-  transaction: TTransaction
+  item: TBudgetItem
 }
 
-const TransactionItem = ({ transaction }: TransactionItemProps) => {
+const TransactionItem = ({ item }: TransactionItemProps) => {
   const router = useRouter()
-  const deleteTransaction = useDeleteTransaction()
+  const deleteBudgetItem = useDeleteBudgetItem()
 
   const onDelete = () => {
-    deleteTransaction.mutate(transaction.id)
+    if (item.id) deleteBudgetItem.mutate(item.id)
   }
 
   return (
@@ -25,7 +25,7 @@ const TransactionItem = ({ transaction }: TransactionItemProps) => {
     >
       <TouchableOpacity
         className='flex-row items-center bg-neutral-100'
-        onPress={() => router.push(`/(app)/home/${transaction.id}`)}
+        onPress={() => router.push(`/(transactions)/${item.id}`)}
         delayPressIn={100}
       >
         <Image
@@ -43,17 +43,21 @@ const TransactionItem = ({ transaction }: TransactionItemProps) => {
               numberOfLines={1}
               ellipsizeMode='tail'
             >
-              {transaction.name}
+              {item.type === 'receipt' ? item.shopName : item.name}
             </Text>
             <Text className='text-sm text-neutral-700'>123</Text>
           </View>
           <Text
             className={`font-bold ${
-              transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
+              item.type === 'income'
+                ? 'text-green-600'
+                : item.type === 'expense' || item.type === 'receipt'
+                  ? 'text-red-600'
+                  : 'text-gray-800'
             }`}
           >
-            {transaction.type === 'income' && '+'}
-            {transaction.amount.toFixed(2)}
+            {item.type === 'income' && '+'}
+            {item.amount.toFixed(2)}
             PLN
           </Text>
         </View>

@@ -22,7 +22,7 @@ export const processImage = async (uri: string) => {
       throw new Error('Network response was not ok')
     }
     const data = await response.json()
-    return data
+    return data.text
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
 

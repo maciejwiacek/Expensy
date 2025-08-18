@@ -1,7 +1,7 @@
 import FormInput from '@/components/FormInput'
 import PrimaryButton from '@/components/PrimaryButton'
 import { useAuth } from '@/context/useAuth'
-import loginSchema from '@/lib/schemas/loginSchema'
+import loginSchema from '@/schemas/loginSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link } from 'expo-router'
 import React from 'react'

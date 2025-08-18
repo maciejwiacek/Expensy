@@ -1,8 +1,8 @@
 import FilterBottomSheet from '@/components/FilterBottomSheet'
 import TransactionItem from '@/components/TransactionItem'
 import { SortOption } from '@/enums/sortOptions'
-import { useTransactions } from '@/lib/firebase/transactions/useTransactions'
-import { sortTransactions } from '@/utils/sortTransactions'
+import { useBudgetItems } from '@/firebase/transactions/useBudgetItems'
+import { sortBudgetItems } from '@/utils/sortBudgetItems'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import React, { useRef, useState } from 'react'
@@ -18,7 +18,7 @@ import {
 import Animated, { LinearTransition } from 'react-native-reanimated'
 
 const Transactions = () => {
-  const { data: transactions } = useTransactions()
+  const { data: budgetItems } = useBudgetItems()
   const [searchQuery, setSearchQuery] = useState('')
   const bottomSheetRef = useRef<BottomSheetModal>(null)
   const [sortOption, setSortOption] = useState<SortOption>(SortOption.DATE_ASC)
@@ -27,18 +27,20 @@ const Transactions = () => {
     bottomSheetRef.current?.present()
   }
 
-  const sortedTransactions = sortTransactions(
-    transactions?.filter((tx) =>
-      tx.name.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || [],
-    sortOption
-  )
+  const filteredItems =
+    budgetItems?.filter((item) => {
+      // Use name or shopName depending on type
+      const nameToCheck = item.type === 'receipt' ? item.shopName : item.name
+      return nameToCheck?.toLowerCase().includes(searchQuery.toLowerCase())
+    }) || []
+
+  const sortedItems = sortBudgetItems(filteredItems, sortOption)
 
   return (
     <>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View className='flex-1 bg-white pt-24 px-4'>
-          <Text className='text-xl font-bold'>Transakcje</Text>
+          <Text className='text-xl font-bold'>Pozycje Budżetowe</Text>
 
           <View className='flex-row items-center w-full gap-x-4 my-4'>
             <TextInput
@@ -56,18 +58,19 @@ const Transactions = () => {
           </View>
 
           <FlatList
-            data={sortedTransactions}
+            data={sortedItems}
             renderItem={({ item }) => (
               <Animated.View
                 layout={LinearTransition}
                 className='rounded-2xl overflow-hidden'
               >
-                <TransactionItem key={item.id} transaction={item} />
+                <TransactionItem item={item} />
               </Animated.View>
             )}
             contentContainerStyle={{ gap: 14, flexGrow: 1, paddingBottom: 14 }}
             showsVerticalScrollIndicator={false}
             keyboardDismissMode='on-drag'
+            keyExtractor={(item) => item.id || Math.random().toString()}
           />
         </View>
       </TouchableWithoutFeedback>

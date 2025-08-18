@@ -6,11 +6,14 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import * as ImagePicker from 'expo-image-picker'
 import { processImage } from '@/utils/processImage'
+import { useCreateBudgetItem } from '@/firebase/transactions/useBudgetItems'
+import { router } from 'expo-router'
 
 const ScanReceipt = () => {
   const [permission, requestPermission] = useCameraPermissions()
   const [flashMode, setFlashMode] = useState(false)
   const cameraRef = useRef<CameraView>(null)
+  const budgetItemMutation = useCreateBudgetItem()
 
   useEffect(() => {
     requestPermission()
@@ -25,10 +28,17 @@ const ScanReceipt = () => {
       })
 
       const data = await processImage(photo.uri)
-      console.log('Processed data:', data)
+      const budgetItem = { ...data, type: 'receipt' }
+      budgetItemMutation.mutate(budgetItem, {
+        onSuccess: () => {
+          router.back()
+        },
+        onError: (error) => {
+          alert(`Wystąpił błąd podczas dodawania pozycji budżetowej. ${error}`)
+        },
+      })
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
-
       Alert.alert(
         'Error',
         `Failed to take picture. Please try again. ${message}`
@@ -39,7 +49,7 @@ const ScanReceipt = () => {
   const handlePickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 0.5,
@@ -48,13 +58,20 @@ const ScanReceipt = () => {
       if (result.canceled) return
 
       const data = await processImage(result.assets[0].uri)
-      console.log('Processed data from picked image:', data)
+      const budgetItem = { ...data, type: 'receipt' }
+      budgetItemMutation.mutate(budgetItem, {
+        onSuccess: () => {
+          router.back()
+        },
+        onError: (error) => {
+          alert(`Wystąpił błąd podczas dodawania pozycji budżetowej. ${error}`)
+        },
+      })
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
-
       Alert.alert(
         'Error',
-        `Failed to take picture. Please try again. ${message}`
+        `Failed to select photo. Please try again. ${message}`
       )
     }
   }

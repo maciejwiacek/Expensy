@@ -1,8 +1,8 @@
 import FormInput from '@/components/FormInput'
 import Heading from '@/components/Heading'
 import SelectableButton from '@/components/SelectableButton'
-import { useCreateTransaction } from '@/lib/firebase/transactions/useTransactions'
-import { TTransaction } from '@/lib/types/transaction'
+import { useCreateBudgetItem } from '@/firebase/transactions/useBudgetItems'
+import { TBudgetItem } from '@/types/transaction'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -17,7 +17,7 @@ const AddTransaction = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<TTransaction>({
+  } = useForm<TBudgetItem>({
     defaultValues: {
       type: 'expense',
       amount: 0,
@@ -25,32 +25,17 @@ const AddTransaction = () => {
   })
   const transactionType = watch('type')
 
-  const createMutation = useCreateTransaction()
+  const createMutation = useCreateBudgetItem()
 
-  const handleAddPress = (data: TTransaction) => {
-    const sanitizedAmount =
-      typeof data.amount === 'string'
-        ? Number((data.amount as string).replace(',', '.'))
-        : data.amount
-    const formattedAmount =
-      data.type === 'expense' ? -sanitizedAmount : sanitizedAmount
-
-    if (isNaN(sanitizedAmount)) {
-      alert('Kwota musi być liczbą')
-      return
-    }
-
-    createMutation.mutate(
-      { ...data, amount: formattedAmount },
-      {
-        onSuccess: () => {
-          router.back()
-        },
-        onError: (error) => {
-          alert(`Wystąpił błąd podczas dodawania transakcji. ${error}`)
-        },
-      }
-    )
+  const handleAddPress = (data: TBudgetItem) => {
+    createMutation.mutate(data, {
+      onSuccess: () => {
+        router.back()
+      },
+      onError: (error) => {
+        alert(`Wystąpił błąd podczas dodawania pozycji budżetowej. ${error}`)
+      },
+    })
   }
 
   return (
@@ -77,7 +62,7 @@ const AddTransaction = () => {
           />
         </View>
 
-        <FormInput<TTransaction>
+        <FormInput<TBudgetItem>
           control={control}
           name='name'
           label='Nazwa'
@@ -86,7 +71,7 @@ const AddTransaction = () => {
           inputProps={{ maxLength: 25 }}
         />
 
-        <FormInput<TTransaction>
+        <FormInput<TBudgetItem>
           control={control}
           name='amount'
           label='Kwota'
@@ -95,7 +80,7 @@ const AddTransaction = () => {
           inputProps={{ keyboardType: 'numeric' }}
         />
 
-        <FormInput<TTransaction>
+        <FormInput<TBudgetItem>
           control={control}
           name='category'
           label='Kategoria'
@@ -103,7 +88,7 @@ const AddTransaction = () => {
           errors={errors}
         />
 
-        <FormInput<TTransaction>
+        <FormInput<TBudgetItem>
           control={control}
           name='description'
           label='Opis (opcjonalnie)'
@@ -115,4 +100,5 @@ const AddTransaction = () => {
     </View>
   )
 }
+
 export default AddTransaction
