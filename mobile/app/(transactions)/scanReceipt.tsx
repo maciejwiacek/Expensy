@@ -8,12 +8,15 @@ import * as ImagePicker from 'expo-image-picker'
 import { processImage } from '@/utils/processImage'
 import { useCreateBudgetItem } from '@/firebase/transactions/useBudgetItems'
 import { router } from 'expo-router'
+import { useReceiptStore } from '@/stores/receiptStore'
 
 const ScanReceipt = () => {
   const [permission, requestPermission] = useCameraPermissions()
   const [flashMode, setFlashMode] = useState(false)
   const cameraRef = useRef<CameraView>(null)
   const budgetItemMutation = useCreateBudgetItem()
+  const receipt = useReceiptStore((state) => state.currentReceipt)
+  const setCurrentReceipt = useReceiptStore((state) => state.setCurrentReceipt)
 
   useEffect(() => {
     requestPermission()
@@ -29,14 +32,8 @@ const ScanReceipt = () => {
 
       const data = await processImage(photo.uri)
       const budgetItem = { ...data, type: 'receipt' }
-      budgetItemMutation.mutate(budgetItem, {
-        onSuccess: () => {
-          router.back()
-        },
-        onError: (error) => {
-          alert(`Wystąpił błąd podczas dodawania pozycji budżetowej. ${error}`)
-        },
-      })
+      setCurrentReceipt(budgetItem)
+      router.push('/(transactions)/verifyReceipt')
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       Alert.alert(
@@ -59,14 +56,8 @@ const ScanReceipt = () => {
 
       const data = await processImage(result.assets[0].uri)
       const budgetItem = { ...data, type: 'receipt' }
-      budgetItemMutation.mutate(budgetItem, {
-        onSuccess: () => {
-          router.back()
-        },
-        onError: (error) => {
-          alert(`Wystąpił błąd podczas dodawania pozycji budżetowej. ${error}`)
-        },
-      })
+      setCurrentReceipt(budgetItem)
+      router.push('/(transactions)/verifyReceipt')
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       Alert.alert(

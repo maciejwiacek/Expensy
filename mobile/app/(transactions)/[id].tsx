@@ -1,4 +1,5 @@
 import Heading from '@/components/Heading'
+import Receipt from '@/components/Receipt'
 import { useBudgetItem } from '@/firebase/transactions/useBudgetItems'
 import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
@@ -17,6 +18,11 @@ const TransactionDetails = () => {
         buttonLabel='Edytuj'
         onPress={() => {}}
       />
+      {item.type === 'receipt' && (
+        <View className='flex-1 justify-center items-center'>
+          <Receipt receipt={item} />
+        </View>
+      )}
     </View>
   )
 }
