@@ -8,5 +8,5 @@ export const processReceipt = async (req, res) => {
   const ocrResult = await getReceiptData(req.file)
   const aiResponse = await parseReceiptData(ocrResult)
 
-  res.json({ text: aiResponse })
+  res.json({ aiResponse })
 }

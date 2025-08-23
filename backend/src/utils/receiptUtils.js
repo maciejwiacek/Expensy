@@ -47,6 +47,10 @@ export const parseReceiptData = async (ocrResult) => {
     (sum, product) => sum + product.price * product.quantity,
     0
   )
+  data.products = data.products.map((product, index) => ({
+    ...product,
+    id: index,
+  }))
 
   return { ...data, amount }
 }
