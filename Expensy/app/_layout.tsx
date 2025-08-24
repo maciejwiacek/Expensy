@@ -2,8 +2,7 @@ import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { tokenCache } from '@clerk/clerk-expo/token-cache'
 import { Inter_400Regular, useFonts } from '@expo-google-fonts/inter'
 import { Stack } from 'expo-router'
-import { ActivityIndicator, StatusBar, StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { ActivityIndicator, StatusBar } from 'react-native'
 
 const RootLayout = () => {
   const { isLoaded, isSignedIn } = useAuth()
@@ -35,20 +34,10 @@ const ProviderLayout = () => {
 
   return (
     <ClerkProvider tokenCache={tokenCache}>
-      <SafeAreaView style={styles.safeArea}>
-        <StatusBar barStyle='dark-content' />
-        <RootLayout />
-      </SafeAreaView>
+      <StatusBar barStyle='dark-content' />
+      <RootLayout />
     </ClerkProvider>
   )
 }
 
 export default ProviderLayout
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'white',
-    paddingHorizontal: 24,
-  },
-})
