@@ -128,7 +128,7 @@ const SignUpScreen = () => {
       </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <Modal visible={true} transparent={true}>
+        <Modal visible={pendingVerification} transparent={true}>
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <Text style={{ marginBottom: 10 }}>
