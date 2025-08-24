@@ -34,7 +34,6 @@ const ProviderLayout = () => {
 
   return (
     <ClerkProvider tokenCache={tokenCache}>
-      <StatusBar barStyle='dark-content' />
       <RootLayout />
     </ClerkProvider>
   )

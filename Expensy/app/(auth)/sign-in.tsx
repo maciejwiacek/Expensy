@@ -2,6 +2,7 @@ import FormInput from '@/components/FormInput'
 import PrimaryButton from '@/components/PrimaryButton'
 import { COLORS } from '@/constants/colors'
 import loginSchema from '@/schemas/loginSchema'
+import { globalStyles } from '@/utils/globalStyles'
 import { useSignIn } from '@clerk/clerk-expo'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link } from 'expo-router'
@@ -10,6 +11,7 @@ import { useForm } from 'react-hook-form'
 import {
   Image,
   Keyboard,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -50,53 +52,55 @@ const SignIn = () => {
   }
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss()
-      }}
-    >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Image
-            source={require('@/assets/images/expensy-logo.png')}
-            style={styles.logo}
-            width={63}
-            height={58}
-            resizeMode='contain'
-          />
-          <Text style={styles.headerText}>Witaj w Expensy!</Text>
+    <SafeAreaView style={globalStyles.safeArea}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss()
+        }}
+      >
+        <View style={[globalStyles.container, styles.container]}>
+          <View style={styles.header}>
+            <Image
+              source={require('@/assets/images/expensy-logo.png')}
+              style={styles.logo}
+              width={63}
+              height={58}
+              resizeMode='contain'
+            />
+            <Text style={styles.headerText}>Witaj w Expensy!</Text>
+          </View>
+          <View style={{ width: '100%', gap: 20 }}>
+            <FormInput<LoginFormValues>
+              name='email'
+              control={control}
+              errors={errors}
+              label='E-mail'
+              placeholder='Wprowadź adres e-mail'
+            />
+            <FormInput<LoginFormValues>
+              name='password'
+              control={control}
+              errors={errors}
+              label='Hasło'
+              placeholder='Wprowadź hasło'
+              inputProps={{ secureTextEntry: true }}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton
+              title='Zaloguj się'
+              onPress={handleSubmit(onSignInPress)}
+            />
+            <Text style={styles.text}>
+              Nie masz konta?{' '}
+              <Link style={styles.link} href='/(auth)/sign-up' replace>
+                Zarejestruj się
+              </Link>
+            </Text>
+          </View>
         </View>
-        <View style={{ width: '100%', gap: 20 }}>
-          <FormInput<LoginFormValues>
-            name='email'
-            control={control}
-            errors={errors}
-            label='E-mail'
-            placeholder='Wprowadź adres e-mail'
-          />
-          <FormInput<LoginFormValues>
-            name='password'
-            control={control}
-            errors={errors}
-            label='Hasło'
-            placeholder='Wprowadź hasło'
-            inputProps={{ secureTextEntry: true }}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <PrimaryButton
-            title='Zaloguj się'
-            onPress={handleSubmit(onSignInPress)}
-          />
-          <Text style={styles.text}>
-            Nie masz konta?{' '}
-            <Link style={styles.link} href='/(auth)/sign-up' replace>
-              Zarejestruj się
-            </Link>
-          </Text>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   )
 }
 
@@ -107,7 +111,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white',
   },
   header: {
     justifyContent: 'center',

@@ -2,6 +2,7 @@ import FormInput from '@/components/FormInput'
 import PrimaryButton from '@/components/PrimaryButton'
 import { COLORS } from '@/constants/colors'
 import registerSchema from '@/schemas/registerSchema'
+import { globalStyles } from '@/utils/globalStyles'
 import { useSignUp } from '@clerk/clerk-expo'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
@@ -9,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import {
   Keyboard,
   Modal,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -80,52 +82,54 @@ const SignUpScreen = () => {
 
   return (
     <>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerTitle}>Zarejestruj się</Text>
-            <Text style={styles.headerSubtitle}>
-              Załóż konto, aby dołączyć do Expensy!
-            </Text>
+      <SafeAreaView style={globalStyles.safeArea}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View style={[globalStyles.container, styles.container]}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerTitle}>Zarejestruj się</Text>
+              <Text style={styles.headerSubtitle}>
+                Załóż konto, aby dołączyć do Expensy!
+              </Text>
+            </View>
+            <View style={{ width: '100%', gap: 20 }}>
+              <FormInput<SignUpFormValues>
+                name='name'
+                control={control}
+                errors={errors}
+                label='Imię'
+                placeholder='Wprowadź swoje imię'
+              />
+              <FormInput<SignUpFormValues>
+                name='email'
+                control={control}
+                errors={errors}
+                label='Email'
+                placeholder='Wprowadź swój email'
+              />
+              <FormInput<SignUpFormValues>
+                name='password'
+                control={control}
+                errors={errors}
+                label='Hasło'
+                placeholder='Wprowadź swoje hasło'
+                inputProps={{ secureTextEntry: true }}
+              />
+              <FormInput<SignUpFormValues>
+                name='confirmPassword'
+                control={control}
+                errors={errors}
+                label='Potwierdź hasło'
+                placeholder='Potwierdź swoje hasło'
+                inputProps={{ secureTextEntry: true }}
+              />
+            </View>
+            <PrimaryButton
+              title='Zarejestruj się'
+              onPress={handleSubmit(onSignUpPress)}
+            />
           </View>
-          <View style={{ width: '100%', gap: 20 }}>
-            <FormInput<SignUpFormValues>
-              name='name'
-              control={control}
-              errors={errors}
-              label='Imię'
-              placeholder='Wprowadź swoje imię'
-            />
-            <FormInput<SignUpFormValues>
-              name='email'
-              control={control}
-              errors={errors}
-              label='Email'
-              placeholder='Wprowadź swój email'
-            />
-            <FormInput<SignUpFormValues>
-              name='password'
-              control={control}
-              errors={errors}
-              label='Hasło'
-              placeholder='Wprowadź swoje hasło'
-              inputProps={{ secureTextEntry: true }}
-            />
-            <FormInput<SignUpFormValues>
-              name='confirmPassword'
-              control={control}
-              errors={errors}
-              label='Potwierdź hasło'
-              placeholder='Potwierdź swoje hasło'
-              inputProps={{ secureTextEntry: true }}
-            />
-          </View>
-          <PrimaryButton
-            title='Zarejestruj się'
-            onPress={handleSubmit(onSignUpPress)}
-          />
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </SafeAreaView>
 
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Modal visible={pendingVerification} transparent={true}>

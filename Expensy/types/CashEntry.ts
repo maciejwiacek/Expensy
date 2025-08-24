@@ -24,9 +24,12 @@ export type CashEntry = {
   updatedAt: Date
 }
 
-export type NewCashEntry = Omit<CashEntry, 'id' | 'createdAt' | 'updatedAt'>
+export type NewCashEntry = Omit<
+  CashEntry,
+  'id' | 'createdAt' | 'updatedAt' | 'kind'
+>
 
 export type NewCashEntryRow = Omit<
   CashEntryRow,
-  'id' | 'created_at' | 'updated_at'
+  'id' | 'created_at' | 'updated_at' | 'kind'
 >
